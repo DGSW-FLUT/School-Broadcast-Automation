@@ -3,7 +3,7 @@ import time
 import traceback
 
 from qthread_with_logging import QThreadWithLogging
-
+from res.schedule import schedule as entire_schedule
 
 class Scheduler(QThreadWithLogging):
     last = datetime.datetime.now()
@@ -44,9 +44,9 @@ class Scheduler(QThreadWithLogging):
                 if curr.date() != prev.date():
                     prev = curr
                     if curr.date().weekday() in [5, 6]:
-                        self.schedule = self.main_platform.entire_schedule['휴일']
+                        self.schedule = entire_schedule['휴일']
                     else:
-                        self.schedule = self.main_platform.entire_schedule['평일']
+                        self.schedule = entire_schedule['평일']
                 for certain_time in self.schedule:
                     if prev.time() < certain_time <= curr.time():
                         prev = datetime.datetime.combine(curr.date(), certain_time)
