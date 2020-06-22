@@ -57,7 +57,7 @@ class MusicPlayer(QThreadWithLogging):
                 with self.lock:
                     try:
                         self.play_mp3(self.playlist[0])
-                        del self.playlist[0]
                     except:
                         self.log(traceback.format_exc())
+                    del self.playlist[0]
                 self.log('unlock')

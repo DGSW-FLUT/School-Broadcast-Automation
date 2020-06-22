@@ -1,13 +1,14 @@
 import datetime
-import time
 import traceback
 
 from qthread_with_logging import QThreadWithLogging
 from res.schedule import schedule as entire_schedule
 
+
 class Scheduler(QThreadWithLogging):
     last = datetime.datetime.now()
     main_platform = None
+    music_for_none_buffer_case = ['res/loona oec-sweet crazy love.mp3', 'res/loona-ding ding dong.mp3']
 
     def __init__(self):
         QThreadWithLogging.__init__(self)
@@ -25,11 +26,14 @@ class Scheduler(QThreadWithLogging):
     def tag_decoder(self, tag: str):
         self.log(f'decode {tag}')
         if tag == '기상송':
-            time.sleep(1)
             with self.main_platform.external_storage_manager.lock:
                 self.log(f'begin 기상송')
-                for path in self.main_platform.external_storage_manager.files_to_play:
-                    self.main_platform.music_player.play_mp3(path)
+                if len(self.main_platform.external_storage_manager.files_to_play) > 0:
+                    for path in self.main_platform.external_storage_manager.files_to_play:
+                        self.main_platform.music_player.push_to_playlist(path)
+                else:
+                    for path in self.music_for_none_buffer_case:
+                        self.main_platform.music_player.push_to_playlist(path)
                 self.log(f'end 기상송')
         elif tag in self.name_for_static_alarm:
             self.log(f'begin {tag}')
@@ -38,6 +42,11 @@ class Scheduler(QThreadWithLogging):
 
     def run(self):
         prev = datetime.datetime(2020, 6, 20)
+        curr = datetime.datetime.now()
+        if curr.date().weekday() in [5, 6]:
+            self.schedule = entire_schedule['휴일']
+        else:
+            self.schedule = entire_schedule['평일']
         while not self.isFinished():
             curr = datetime.datetime.now()
             try:

@@ -27,7 +27,6 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
 
         self.scheduler = Scheduler()
         self.scheduler.main_platform = self
-        self.scheduler.schedule = entire_schedule['휴일']
         self.scheduler.start()
 
         self.log_units = [self.external_storage_manager, self.music_player, self.scheduler]
@@ -58,6 +57,12 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
 
         self.show()
 
+    def insert_log(self, log: str):
+        row = self.console_log.rowCount()
+        self.console_log.insertRow(row)
+        index = self.console_log.index(row)
+        self.console_log.setData(index, log)
+
     @pyqtSlot()
     def on_toggle_cbox(self, cbox, k):
         if k < len(self.log_units):
@@ -65,10 +70,8 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
 
     @pyqtSlot()
     def on_input(self):
-        row = self.console_log.rowCount()
-        self.console_log.insertRow(row)
-        index = self.console_log.index(row)
-        self.console_log.setData(index, f'>> {self.data_edit.text()}')
+        text = self.data_edit.text()
+        self.parse_command(text.lower())
         self.console.scrollToBottom()
         self.data_edit.setText('')
 
@@ -83,11 +86,13 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         if len(logs_to_insert) > 0:
             logs_to_insert.sort(key=lambda x: x[0])
             for log in logs_to_insert:
-                row = self.console_log.rowCount()
-                self.console_log.insertRow(row)
-                index = self.console_log.index(row)
-                self.console_log.setData(index,
-                                         f'{log[0].hour}:{log[0].minute}: ' + log[1].replace(os.getcwd(), '$://'))
+                self.insert_log(f'{log[0].hour}:{log[0].minute}: ' + log[1].replace(os.getcwd(), '$://'))
+
+    def parse_command(self, command: str):
+        self.insert_log(f'>> {command}')
+        if command == 'test':
+            self.music_player.play_mp3('res/테스트.mp3')
+        self.insert_log(f'<< {command}')
 
 
 if __name__ == '__main__':
