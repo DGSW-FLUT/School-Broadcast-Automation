@@ -40,7 +40,7 @@ class MusicPlayer(QThreadWithLogging):
     def play_mp3(self, mp3_path):
         self.log(f'begin playing {mp3_path}')
         if os.name == 'posix':
-            process = subprocess.Popen(f'omxplayer -o local {mp3_path} --no-keys', shell=True)
+            process = subprocess.Popen(f'omxplayer -o local "{mp3_path}" --no-keys', shell=True)
             process.wait()
             process.terminate()
         else:
