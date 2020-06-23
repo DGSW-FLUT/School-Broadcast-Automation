@@ -315,7 +315,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QCheckBox" name="cboxlist_item16">
+   <widget class="QCheckBox" name="cbox_autoscroll">
     <property name="geometry">
      <rect>
       <x>620</x>
@@ -325,7 +325,7 @@
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>Auto Scroll</string>
     </property>
    </widget>
   </widget>

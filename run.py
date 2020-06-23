@@ -32,12 +32,14 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         self.log_units = [self.external_storage_manager, self.music_player, self.scheduler]
 
         self.checkbox_list = []
-        for k in range(17):
+        for k in range(16):
             self.checkbox_list.append(getattr(self, f'cboxlist_item{k}'))
         for k, log_unit in enumerate(self.log_units):
             self.checkbox_list[k].setText(log_unit.log_header)
             self.checkbox_list[k].setChecked(True)
             self.checkbox_list[k].toggled.connect(lambda: self.on_toggle_cbox(self.checkbox_list[k], k))
+
+        self.cbox_autoscroll.setChecked(True)
 
         self.console_log = QStringListModel()
         self.console.setModel(self.console_log)
@@ -87,6 +89,8 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
             logs_to_insert.sort(key=lambda x: x[0])
             for log in logs_to_insert:
                 self.insert_log(f'{log[0].hour}:{log[0].minute}: ' + log[1].replace(os.getcwd(), '$://'))
+            if self.cbox_autoscroll.isChecked():
+                self.console.scrollToBottom()
 
     def parse_command(self, command: str):
         self.insert_log(f'>> {command}')
