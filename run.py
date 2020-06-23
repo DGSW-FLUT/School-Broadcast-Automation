@@ -88,7 +88,7 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         if len(logs_to_insert) > 0:
             logs_to_insert.sort(key=lambda x: x[0])
             for log in logs_to_insert:
-                self.insert_log(f'{log[0].hour}:{log[0].minute}: ' + log[1].replace(os.getcwd(), '$://'))
+                self.insert_log('%02d:%02d: %s' % (log[0].hour, log[0].minute, log[1].replace(os.getcwd(), '$://')))
             if self.cbox_autoscroll.isChecked():
                 self.console.scrollToBottom()
 
