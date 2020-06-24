@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import time
 import traceback
 from threading import Lock
 
@@ -56,6 +57,7 @@ class ExternalStorageManager(QThreadWithLogging):
                     self.old_external_storage_list = new_external_storage_list
                     self.log('detect_ExtStorage_change')
                     if len(new_external_storage_list) > 0:
+                        time.sleep(5)
                         self.log('lock')
                         with self.lock:
                             if is_posix:
@@ -71,5 +73,9 @@ class ExternalStorageManager(QThreadWithLogging):
                             self.clear_internal_storage()
                             self.store_from_external_storage(load_path, files_to_store)
                         self.log('unlock')
+                    else:
+                        self.log('can\'t detect ExtStorage')
+                else:
+                    time.sleep(5)
             except:
                 self.log(traceback.format_exc())
