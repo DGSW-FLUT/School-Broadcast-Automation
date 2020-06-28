@@ -12,6 +12,8 @@ if os.name == 'nt':
     import pygame
 
     pygame.mixer.init()
+else:
+    import RPi.GPIO as gpio
 
 
 class MusicPlayer(QThreadWithLogging):
@@ -19,6 +21,9 @@ class MusicPlayer(QThreadWithLogging):
         QThreadWithLogging.__init__(self)
         self.playlist = []
         self.lock = Lock()
+        if os.name == 'posix':
+            gpio.setmode(gpio.BCM)
+            gpio.setup(18, gpio.OUT)
 
     @pyqtSlot(str)
     def push_to_playlist(self, path):
@@ -40,9 +45,11 @@ class MusicPlayer(QThreadWithLogging):
     def play_mp3(self, mp3_path):
         self.log(f'begin playing {mp3_path}')
         if os.name == 'posix':
+            gpio.output(18, gpio.HIGH)
             process = subprocess.Popen(f'omxplayer -o local "{mp3_path}" --no-keys', shell=True)
             process.wait()
             process.terminate()
+            gpio.output(18, gpio.LOW)
         else:
             time.sleep(1)
             pygame.mixer.music.load(f'{mp3_path}')
