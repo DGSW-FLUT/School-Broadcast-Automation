@@ -96,6 +96,8 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         self.insert_log(f'>> {command}')
         if command == 'test':
             self.music_player.play_mp3('res/테스트.mp3')
+        elif command.startswith('-'):
+            self.scheduler.tag_decoder(command[1:])
         self.insert_log(f'<< {command}')
 
 
