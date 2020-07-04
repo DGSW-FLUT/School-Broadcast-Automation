@@ -51,7 +51,6 @@ class MusicPlayer(QThreadWithLogging):
             process.terminate()
             gpio.output(18, gpio.LOW)
         else:
-            time.sleep(1)
             pygame.mixer.music.load(f'{mp3_path}')
             pygame.mixer.music.play()
             while pygame.mixer.music.get_busy(): pass
