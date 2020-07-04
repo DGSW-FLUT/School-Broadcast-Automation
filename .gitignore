@@ -123,3 +123,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea
+
+# School Broadcast Automation
+buffer/*.mp3
+tts_buffer/*.mp3

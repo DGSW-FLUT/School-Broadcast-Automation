@@ -8,6 +8,7 @@ from external_storage_manager import ExternalStorageManager
 from music_player import MusicPlayer
 from res.schedule import schedule as entire_schedule
 from scheduler import Scheduler
+from speaker import Speaker
 
 
 class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
@@ -26,10 +27,12 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         self.music_player.start()
 
         self.scheduler = Scheduler(self)
-        self.scheduler.main_platform = self
         self.scheduler.start()
 
-        self.log_units = [self.external_storage_manager, self.music_player, self.scheduler]
+        self.speaker = Speaker(self)
+        self.speaker.start()
+
+        self.log_units = [self.external_storage_manager, self.music_player, self.scheduler, self.speaker]
 
         self.checkbox_list = []
         for k in range(16):
@@ -98,6 +101,8 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
             self.music_player.play_mp3('res/테스트.mp3')
         elif command.startswith('-'):
             self.scheduler.tag_decoder(command[1:])
+        elif command.startswith('+'):
+            self.speaker.speak(command[1:])
         self.insert_log(f'<< {command}')
 
 
