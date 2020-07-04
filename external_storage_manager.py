@@ -40,6 +40,8 @@ class ExternalStorageManager(QThreadWithLogging):
     def clear_internal_storage(self):
         self.log('clear_IntStorage')
         for file in os.listdir(self.store_path):
+            if file.startswith('.'):
+                continue
             os.remove(self.store_path + file)
 
     def store_from_external_storage(self, load_path, files_to_store):
