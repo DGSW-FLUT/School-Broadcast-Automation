@@ -7,11 +7,11 @@ from res.schedule import schedule as entire_schedule
 
 class Scheduler(QThreadWithLogging):
     last = datetime.datetime.now()
-    main_platform = None
     music_for_none_buffer_case = ['res/loona oec-sweet crazy love.mp3', 'res/loona-ding ding dong.mp3']
 
-    def __init__(self):
+    def __init__(self, main_platform):
         QThreadWithLogging.__init__(self)
+        self.main_platform = main_platform
         self.schedule = []
         self.name_for_static_alarm = []
         self.name_for_static_alarm.append('입구폐쇄')

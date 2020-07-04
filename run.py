@@ -25,7 +25,7 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         self.music_player = MusicPlayer()
         self.music_player.start()
 
-        self.scheduler = Scheduler()
+        self.scheduler = Scheduler(self)
         self.scheduler.main_platform = self
         self.scheduler.start()
 
@@ -66,9 +66,9 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         self.console_log.setData(index, log)
 
     @pyqtSlot()
-    def on_toggle_cbox(self, cbox, k):
+    def on_toggle_cbox(self, check_box, k):
         if k < len(self.log_units):
-            self.log_units[k].log_enable = cbox.isChecked()
+            self.log_units[k].log_enable = check_box.isChecked()
 
     @pyqtSlot()
     def on_input(self):
