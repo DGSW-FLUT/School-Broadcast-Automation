@@ -5,6 +5,11 @@ from qthread_with_logging import QThreadWithLogging
 from res.schedule import schedule as entire_schedule
 
 
+def get_music_for_none_buffer_case():
+    weekday = datetime.datetime.now().weekday()
+    return [f'res/default_music/{weekday}/0.mp3', f'res/default_music/{weekday}/1.mp3']
+
+
 class Scheduler(QThreadWithLogging):
     last = datetime.datetime.now()
     music_for_none_buffer_case = ['res/loona oec-sweet crazy love.mp3', 'res/loona-ding ding dong.mp3']
@@ -26,18 +31,20 @@ class Scheduler(QThreadWithLogging):
         self.log(f'decode {tag}')
         if tag == '기상송':
             with self.main_platform.external_storage_manager.lock:
-                self.log(f'begin 기상송')
+                self.log(f'getlock 기상송')
                 if len(self.main_platform.external_storage_manager.files_to_play) > 0:
                     for path in self.main_platform.external_storage_manager.files_to_play:
                         self.main_platform.music_player.push_to_playlist(path)
                 else:
-                    for path in self.music_for_none_buffer_case:
+                    for path in get_music_for_none_buffer_case():
                         self.main_platform.music_player.push_to_playlist(path)
-                self.log(f'end 기상송')
+        elif tag == '기상송초기화':
+            self.main_platform.external_storage_manager.clear_internal_storage()
         elif tag in self.name_for_static_alarm:
-            self.log(f'begin {tag}')
             self.main_platform.music_player.play_mp3(f'res/{tag}.mp3')
-            self.log(f'end {tag}')
+        else:
+            self.log(f'unknown command {tag}')
+        self.log(f'finish {tag}')
 
     def run(self):
         prev = datetime.datetime(2020, 6, 23)
