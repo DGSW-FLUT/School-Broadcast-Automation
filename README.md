@@ -5,3 +5,5 @@ Build with Python3.7
 * Raspbian Buster or later
 
 
+## References
+* [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet/)

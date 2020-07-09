@@ -1,6 +1,8 @@
 import datetime
 import traceback
 
+from PyQt5.QtCore import pyqtSlot
+
 from qthread_with_logging import QThreadWithLogging
 from res.schedule import schedule as entire_schedule
 
@@ -12,7 +14,6 @@ def get_music_for_none_buffer_case():
 
 class Scheduler(QThreadWithLogging):
     last = datetime.datetime.now()
-    music_for_none_buffer_case = ['res/loona oec-sweet crazy love.mp3', 'res/loona-ding ding dong.mp3']
 
     def __init__(self, main_platform):
         QThreadWithLogging.__init__(self)
@@ -27,21 +28,21 @@ class Scheduler(QThreadWithLogging):
             for meal in ['아침', '점심', '저녁']:
                 self.name_for_static_alarm.append(f'{grade}학년{meal}')
 
+    @pyqtSlot(str)
     def tag_decoder(self, tag: str):
         self.log(f'decode {tag}')
         if tag == '기상송':
             with self.main_platform.external_storage_manager.lock:
                 self.log(f'getlock 기상송')
                 if len(self.main_platform.external_storage_manager.files_to_play) > 0:
-                    for path in self.main_platform.external_storage_manager.files_to_play:
-                        self.main_platform.music_player.push_to_playlist(path)
+                    self.main_platform.music_player.push_to_playlist(
+                        self.main_platform.external_storage_manager.files_to_play)
                 else:
-                    for path in get_music_for_none_buffer_case():
-                        self.main_platform.music_player.push_to_playlist(path)
+                    self.main_platform.music_player.push_to_playlist(get_music_for_none_buffer_case())
         elif tag == '기상송초기화':
             self.main_platform.external_storage_manager.clear_internal_storage()
         elif tag in self.name_for_static_alarm:
-            self.main_platform.music_player.play_mp3(f'res/{tag}.mp3')
+            self.main_platform.music_player.push_to_playlist([f'res/{tag}.mp3'])
         else:
             self.log(f'unknown command {tag}')
         self.log(f'finish {tag}')

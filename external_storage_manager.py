@@ -31,6 +31,7 @@ def get_available_external_storage_list():
 class ExternalStorageManager(QThreadWithLogging):
     old_external_storage_list = []
     files_to_play = []
+    files_to_store = []
     lock = Lock()
 
     def __init__(self):
@@ -39,15 +40,16 @@ class ExternalStorageManager(QThreadWithLogging):
 
     def clear_internal_storage(self):
         self.log('clear_IntStorage')
+        self.files_to_play = []
         for file in os.listdir(self.store_path):
             if file.startswith('.'):
                 continue
             os.remove(self.store_path + file)
 
-    def store_from_external_storage(self, load_path, files_to_store):
+    def store_from_external_storage(self, load_path):
         self.log('store_IntStorage_from_ExtStorage')
-        self.files_to_play = []
-        for k, file in enumerate(files_to_store):
+        for k, file in enumerate(self.files_to_store):
+            self.log(f'store_IntStorage_from_ExtStorage {file}')
             shutil.copyfile(load_path + file, self.store_path + f'{k}.mp3')
             self.files_to_play.append(self.store_path + f'{k}.mp3')
 
@@ -66,14 +68,14 @@ class ExternalStorageManager(QThreadWithLogging):
                                 load_path = '/media/pi/' + new_external_storage_list[0] + '/'
                             else:
                                 load_path = new_external_storage_list[0]
-                            files_to_store = [
+                            self.files_to_store = [
                                 name for name in os.listdir(load_path)
                                 if os.path.isfile(load_path + name) and
                                    name.endswith('.mp3') and
                                    name[0] not in ('.', '$', '~')
                             ]
                             self.clear_internal_storage()
-                            self.store_from_external_storage(load_path, files_to_store)
+                            self.store_from_external_storage(load_path)
                         self.log('unlock')
                     else:
                         self.log('can\'t detect ExtStorage')

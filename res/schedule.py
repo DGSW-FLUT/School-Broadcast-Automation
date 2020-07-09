@@ -24,8 +24,8 @@ schedule = {
         datetime.time(hour=12, minute=39): '1학년점심',
 
         datetime.time(hour=17, minute=59): '3학년저녁',
-        datetime.time(hour=18, minute=04): '2학년저녁',
-        datetime.time(hour=18, minute=09): '1학년저녁',
+        datetime.time(hour=18, minute=4): '2학년저녁',
+        datetime.time(hour=18, minute=9): '1학년저녁',
         datetime.time(hour=19, minute=10): '복귀체크',
 
         datetime.time(hour=21, minute=17): '입구폐쇄',

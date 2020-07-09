@@ -6,15 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>849</height>
+    <width>1135</width>
+    <height>809</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="sizeIncrement">
+   <size>
+    <width>100</width>
+    <height>100</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>School Broadcast Automation</string>
@@ -22,319 +28,464 @@
   <property name="statusTip">
    <string/>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+                background-color: #19232D;
+                border: 0px solid #32414B;
+                padding: 0px;
+                color: #F0F0F0;
+                selection-background-color: #1464A0;
+                selection-color: #F0F0F0;
+                }
+
+                QWidget:disabled {
+                background-color: #19232D;
+                color: #787878;
+                selection-background-color: #14506E;
+                selection-color: #787878;
+                }
+
+                QWidget::item:selected {
+                background-color: #1464A0;
+                color: white;
+                }
+
+                QWidget::item:hover {
+                background-color: #148CD2;
+                color: #32414B;
+                }
+
+                QCheckBox {
+                background-color: #19232D;
+                color: #F0F0F0;
+                outline: none;
+                }
+
+                QCheckBox:focus {
+                border: none;
+                }
+
+                QCheckBox QWidget:disabled {
+                background-color: #19232D;
+                color: #787878;
+                }
+
+                QAbstractScrollArea {
+                background-color: #19232D;
+                border: 1px solid #32414B;
+                border-radius: 4px;
+                padding: 2px;
+                /* fix #159 */
+                min-height: 1.25em;
+                /* fix #159 */
+                color: #F0F0F0;
+                }
+
+                QAbstractScrollArea:disabled {
+                color: #787878;
+                }
+
+                QScrollArea QWidget QWidget:disabled {
+                background-color: #19232D;
+                }
+
+                QPushButton {
+                background-color: #505F69;
+                border: 1px solid #32414B;
+                color: #F0F0F0;
+                border-radius: 4px;
+                padding: 3px;
+                outline: none;
+                /* Issue #194 - Special case of QPushButton inside dialogs, for better UI */
+                min-width: 80px;
+                }
+
+                QPushButton:disabled {
+                background-color: #32414B;
+                border: 1px solid #32414B;
+                color: #787878;
+                border-radius: 4px;
+                padding: 3px;
+                }
+
+                QPushButton:checked {
+                background-color: #32414B;
+                border: 1px solid #32414B;
+                border-radius: 4px;
+                padding: 3px;
+                outline: none;
+                }
+
+                QPushButton:checked:disabled {
+                background-color: #19232D;
+                border: 1px solid #32414B;
+                color: #787878;
+                border-radius: 4px;
+                padding: 3px;
+                outline: none;
+                }
+
+                QPushButton:checked:selected {
+                background: #1464A0;
+                color: #32414B;
+                }
+
+                QPushButton::menu-indicator {
+                subcontrol-origin: padding;
+                subcontrol-position: bottom right;
+                bottom: 4px;
+                }
+
+                QPushButton:pressed {
+                background-color: #19232D;
+                border: 1px solid #19232D;
+                }
+
+                QPushButton:pressed:hover {
+                border: 1px solid #148CD2;
+                }
+
+                QPushButton:hover {
+                border: 1px solid #148CD2;
+                color: #F0F0F0;
+                }
+
+                QPushButton:selected {
+                background: #1464A0;
+                color: #32414B;
+                }
+
+                QPushButton:hover {
+                border: 1px solid #148CD2;
+                color: #F0F0F0;
+                }
+
+                QPushButton:focus {
+                border: 1px solid #1464A0;
+                }
+
+                QLineEdit {
+                background-color: #19232D;
+                padding-top: 2px;
+                /* This QLineEdit fix 103, 111 */
+                padding-bottom: 2px;
+                /* This QLineEdit fix 103, 111 */
+                padding-left: 4px;
+                padding-right: 4px;
+                border-style: solid;
+                border: 1px solid #32414B;
+                border-radius: 4px;
+                color: #F0F0F0;
+                }
+
+                QLineEdit:disabled {
+                background-color: #19232D;
+                color: #787878;
+                }
+
+                QLineEdit:hover {
+                border: 1px solid #148CD2;
+                color: #F0F0F0;
+                }
+
+                QLineEdit:focus {
+                border: 1px solid #1464A0;
+                }
+
+                QLineEdit:selected {
+                background-color: #1464A0;
+                color: #32414B;
+                }
+
+                QColumnView {
+                background-color: #1464A0;
+                color: #32414B;
+                }
+
+                QHeaderView {
+                background-color: #32414B;
+                border: 0px transparent #32414B;
+                padding: 0px;
+                margin: 0px;
+                border-radius: 0px;
+                }
+
+                QHeaderView:disabled {
+                background-color: #32414B;
+                border: 1px transparent #32414B;
+                padding: 2px;
+                }
+
+                QHeaderView::section {
+                background-color: #32414B;
+                color: #F0F0F0;
+                padding: 2px;
+                border-radius: 0px;
+                text-align: left;
+                }
+
+                QHeaderView::section:checked {
+                color: #F0F0F0;
+                background-color: #1464A0;
+                }
+
+                QHeaderView::section:checked:disabled {
+                color: #787878;
+                background-color: #14506E;
+                }
+
+                QHeaderView::section::horizontal {
+                padding-left: 4px;
+                padding-right: 4px;
+                border-left: 1px solid #19232D;
+                }
+
+                QHeaderView::section::horizontal::first, QHeaderView::section::horizontal::only-one {
+                border-left: 1px solid #32414B;
+                }
+
+                QHeaderView::section::horizontal:disabled {
+                color: #787878;
+                }
+
+                QHeaderView::section::vertical {
+                padding-left: 4px;
+                padding-right: 4px;
+                border-top: 1px solid #19232D;
+                }
+
+                QHeaderView::section::vertical::first, QHeaderView::section::vertical::only-one {
+                border-top: 1px solid #32414B;
+                }
+
+                QHeaderView::section::vertical:disabled {
+                color: #787878;
+                }</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTreeWidget" name="default_schedule_tree">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>461</width>
-      <height>411</height>
-     </rect>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+     <horstretch>99</horstretch>
+     <verstretch>99</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>15</number>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
+    <property name="topMargin">
+     <number>15</number>
     </property>
-    <property name="columnCount">
+    <property name="rightMargin">
+     <number>15</number>
+    </property>
+    <property name="bottomMargin">
+     <number>15</number>
+    </property>
+    <property name="horizontalSpacing">
+     <number>5</number>
+    </property>
+    <property name="verticalSpacing">
      <number>0</number>
     </property>
-   </widget>
-   <widget class="QListView" name="today_list">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>10</y>
-      <width>311</width>
-      <height>411</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="data_edit">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>770</y>
-      <width>601</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>18</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="submit">
-    <property name="geometry">
-     <rect>
-      <x>614</x>
-      <y>770</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>MS Gothic</family>
-      <pointsize>18</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>OK</string>
-    </property>
-   </widget>
-   <widget class="QListView" name="console">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>430</y>
-      <width>601</width>
-      <height>331</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item0">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>430</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item1">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>450</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item2">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>470</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item3">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>490</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item4">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>510</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item5">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>530</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item6">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>550</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item7">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>570</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item8">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>590</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item9">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>610</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item10">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>630</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item11">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>650</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item12">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>670</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item13">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>690</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item14">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>710</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cboxlist_item15">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>730</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="cbox_autoscroll">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>750</y>
-      <width>171</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Auto Scroll</string>
-    </property>
-   </widget>
+    <item row="0" column="0">
+     <widget class="QTreeWidget" name="schedule_tree">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="columnCount">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <layout class="QVBoxLayout" name="button_list">
+      <property name="bottomMargin">
+       <number>15</number>
+      </property>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QListView" name="console">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <layout class="QVBoxLayout" name="checkbox_list">
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item0">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item1">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item2">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item3">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item4">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item5">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item6">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item7">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item8">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item9">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item10">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item11">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item12">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item13">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item14">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_item15">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_list_autoscroll">
+        <property name="text">
+         <string>Auto Scroll</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLineEdit" name="data_edit">
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="submit">
+      <property name="font">
+       <font>
+        <family>MS Gothic</family>
+        <pointsize>18</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>OK</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1135</width>
      <height>21</height>
     </rect>
    </property>
