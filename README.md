@@ -1,5 +1,6 @@
 # School Broadcast Automation
 ![alt](/example.png)
+![alt](/wiring_diagram.png)
 Build with Python3.7
 ## Available Platform
 * Windows 7 or later
@@ -17,5 +18,8 @@ Build with Python3.7
 2. `sudo python3 -m pip install -r requirements-posix.txt` 로 의존 라이브러리 설치
 3. `sudo python3 run.py` 로 실행(**GUI 환경에서 실행**)
 
+## 하드웨어 환경
+
 ## References
 * [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet/)
+* [IBM TTS](https://cloud.ibm.com/apidocs/text-to-speech?code=python/)
