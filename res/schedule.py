@@ -8,6 +8,7 @@ schedule = {
         datetime.time(hour=7, minute=24): '1학년아침',
         datetime.time(hour=7, minute=57): '기상송',
         datetime.time(hour=8, minute=7): '기상송초기화',
+        datetime.time(hour=8, minute=17): '기숙사퇴실',
         datetime.time(hour=21, minute=17): '입구폐쇄',
         datetime.time(hour=22, minute=28): '점호준비',
         datetime.time(hour=22, minute=40): '점호시작',

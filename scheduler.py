@@ -24,6 +24,7 @@ class Scheduler(QThreadWithLogging):
         self.name_for_static_alarm.append('점호준비')
         self.name_for_static_alarm.append('점호시작')
         self.name_for_static_alarm.append('점호종료')
+        self.name_for_static_alarm.append('기숙사퇴실')
         for grade in ['1', '2', '3']:
             for meal in ['아침', '점심', '저녁']:
                 self.name_for_static_alarm.append(f'{grade}학년{meal}')
@@ -48,7 +49,7 @@ class Scheduler(QThreadWithLogging):
         self.log(f'finish {tag}')
 
     def run(self):
-        prev = datetime.datetime(2020, 6, 23)
+        prev = datetime.datetime(2020, 8, 1)
         curr = datetime.datetime.now()
         if curr.date().weekday() in [5, 6]:
             self.schedule = entire_schedule['휴일']
