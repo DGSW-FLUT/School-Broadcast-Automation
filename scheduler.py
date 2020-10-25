@@ -9,7 +9,7 @@ from res.schedule import schedule as entire_schedule
 
 def get_music_for_none_buffer_case():
     weekday = datetime.datetime.now().weekday()
-    return [f'res/default_music/{weekday}/0.mp3', f'res/default_music/{weekday}/1.mp3']
+    return [f'res/default_music/{weekday}/0.mp3', f'res/default_music/{weekday}/1.mp3', f'res/default_music/{weekday}/2.mp3']
 
 
 class Scheduler(QThreadWithLogging):

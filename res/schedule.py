@@ -7,7 +7,7 @@ schedule = {
         datetime.time(hour=7, minute=19): '2학년아침',
         datetime.time(hour=7, minute=24): '1학년아침',
         datetime.time(hour=7, minute=57): '기상송',
-        datetime.time(hour=8, minute=7): '기상송초기화',
+        datetime.time(hour=8, minute=15): '기상송초기화',
         datetime.time(hour=8, minute=17): '기숙사퇴실',
         datetime.time(hour=21, minute=17): '입구폐쇄',
         datetime.time(hour=22, minute=28): '점호준비',
@@ -16,7 +16,7 @@ schedule = {
     },
     '휴일': {
         datetime.time(hour=7, minute=27): '기상송',
-        datetime.time(hour=7, minute=37): '기상송초기화',
+        datetime.time(hour=7, minute=47): '기상송초기화',
         datetime.time(hour=8, minute=9): '3학년아침',
         datetime.time(hour=8, minute=14): '2학년아침',
         datetime.time(hour=8, minute=19): '1학년아침',
