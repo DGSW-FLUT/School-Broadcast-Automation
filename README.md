@@ -4,7 +4,7 @@
 Build with Python3.7
 ## Available Platform
 * Windows 7 or later
-* Raspbian Buster or later(**Buster 이전 버전은 Python3.7을 지원하지 않음**)
+* Raspbian Buster or later(**Buster 미만 버전은 Python3.7을 지원하지 않음**)
 ## 권장 프로젝트 세팅
 ### Windows
 1. Python 3.7 설치
@@ -22,4 +22,3 @@ Build with Python3.7
 
 ## References
 * [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet/)
-* [IBM TTS](https://cloud.ibm.com/apidocs/text-to-speech?code=python/)

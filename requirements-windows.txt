@@ -2,5 +2,3 @@ PyQt5==5.15.0
 PyQt5-sip==12.8.0
 PyQt5-stubs==5.14.2.2
 pygame==1.9.6
-ibm-cloud-sdk-core==1.5.1
-ibm-watson==4.5.0

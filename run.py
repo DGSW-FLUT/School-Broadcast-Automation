@@ -10,7 +10,6 @@ from music_player import MusicPlayer
 from res.quick_macros import quick_macros
 from res.schedule import schedule as entire_schedule
 from scheduler import Scheduler
-from speaker import Speaker
 
 global main
 main = None
@@ -67,10 +66,7 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         self.scheduler = Scheduler(self)
         self.scheduler.start()
 
-        self.speaker = Speaker(self)
-        self.speaker.start()
-
-        self.log_units = [self.external_storage_manager, self.music_player, self.scheduler, self.speaker]
+        self.log_units = [self.external_storage_manager, self.music_player, self.scheduler]
 
         self.checkbox_list = []
         for k in range(16):
@@ -170,8 +166,6 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
                     
             elif command.startswith('-'):
                 self.scheduler.tag_decoder(command[1:])
-            elif command.startswith('+'):
-                self.speaker.speak(command[1:])
         except:
             self.insert_log(traceback.format_exc())
         self.insert_log(f'<< {command}')
