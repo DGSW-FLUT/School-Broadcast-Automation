@@ -3,6 +3,7 @@ import datetime
 schedule = {
     '평일': {
         datetime.time(hour=6, minute=17): '기상송',
+        datetime.time(hour=6, minute=27): '아침운동체크',
         datetime.time(hour=7, minute=14): '3학년아침',
         datetime.time(hour=7, minute=19): '2학년아침',
         datetime.time(hour=7, minute=24): '1학년아침',
@@ -16,6 +17,7 @@ schedule = {
     },
     '휴일': {
         datetime.time(hour=7, minute=27): '기상송',
+        datetime.time(hour=7, minute=37): '아침운동체크',
         datetime.time(hour=7, minute=47): '기상송초기화',
         datetime.time(hour=8, minute=9): '3학년아침',
         datetime.time(hour=8, minute=14): '2학년아침',

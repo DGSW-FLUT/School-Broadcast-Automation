@@ -5,7 +5,7 @@ import time
 import traceback
 from threading import Lock
 
-from qthread_with_logging import QThreadWithLogging
+from debug.qthread_with_logging import QThreadWithLogging
 
 is_posix = os.name == 'posix'
 
@@ -74,6 +74,7 @@ class ExternalStorageManager(QThreadWithLogging):
                                    name.endswith('.mp3') and
                                    name[0] not in ('.', '$', '~')
                             ]
+                            self.files_to_store.sort()
                             self.clear_internal_storage()
                             self.store_from_external_storage(load_path)
                         self.log('unlock')

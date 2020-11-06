@@ -27,3 +27,7 @@ class QThreadWithLogging(QThread):
     @pyqtSlot(bool)
     def set_log_feature(self, enable):
         self.log_enable = enable
+
+    @pyqtSlot()
+    def close(self):
+        pass

@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import QTreeWidgetItem, QPushButton
 
 from external_storage_manager import ExternalStorageManager
 from music_player import MusicPlayer
-from res.quick_macros import quick_macros
-from res.schedule import schedule as entire_schedule
+from data.quick_macros import quick_macros
+from data.schedule import schedule as entire_schedule
 from scheduler import Scheduler
 
 global main
@@ -47,7 +47,7 @@ def qt_message_handler(mode, context, message):
 QtCore.qInstallMessageHandler(qt_message_handler)
 
 
-class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
+class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('data/planner.ui')[0]):
     def __init__(self):
         global main
         super().__init__()
@@ -100,6 +100,13 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
 
         self.show()
 
+    def closeEvent(self, c):
+        print('Closing...')
+        self.log_timer.stop()
+        for log_unit in self.log_units:
+            log_unit.close()
+            log_unit.quit()
+
     def insert_log(self, log: str):
         row = self.console_log.rowCount()
         self.console_log.insertRow(row)
@@ -151,7 +158,9 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
         self.insert_log(f'>> {command}')
         try:
             if command == 'test':
-                self.music_player.play_mp3('res/테스트.mp3')
+                self.music_player.music_pause()
+                self.music_player.play_unstoppable_music('audio/테스트.mp3')
+                self.music_player.music_resume()
             elif command == 'get_musics':
                 with self.external_storage_manager.lock:
                     files_to_store = self.external_storage_manager.files_to_store
@@ -161,11 +170,19 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('res/planner.ui')[0]):
                                         '=========================================')
                     else:
                         self.insert_log('=================현재 기상송===============\n(없음, 기본 기상곡)\n' +
-                                        '=========================================' 
+                                        '========================================='
                                         )
-                    
+            elif command == 'all_around_test':
+                self.scheduler.all_around_test()
+            elif command == 'abort_song':
+                self.music_player.process.terminate()
+                self.music_player.process = None
+                self.music_player.process_util = None
             elif command.startswith('-'):
                 self.scheduler.tag_decoder(command[1:])
+            else:
+                self.insert_log(f'?? {command}')
+
         except:
             self.insert_log(traceback.format_exc())
         self.insert_log(f'<< {command}')
