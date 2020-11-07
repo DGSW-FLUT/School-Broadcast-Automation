@@ -24,6 +24,8 @@ class MusicPlayer(QThreadWithLogging):
         self.process_util = None
         self.player = None
         self.lock = Lock()
+
+        self.dbus_increment = 1
         if capable_gpio:
             gpio.setmode(gpio.BCM)
             gpio.setup(18, gpio.OUT)
@@ -51,7 +53,9 @@ class MusicPlayer(QThreadWithLogging):
             gpio.output(18, gpio.HIGH)
         try:
             if is_run_on_posix:
-                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b')
+                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b',
+                                        dbus_name=f'org.mpris.MediaPlayer2.omxplayer{self.dbus_increment}')
+                self.dbus_increment += 1
                 while self.player._process is not None: time.sleep(1)
             else:
                 process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
@@ -71,7 +75,9 @@ class MusicPlayer(QThreadWithLogging):
             gpio.output(18, gpio.HIGH)
         try:
             if is_run_on_posix:
-                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b')
+                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b',
+                                        dbus_name=f'org.mpris.MediaPlayer2.omxplayer{self.dbus_increment}')
+                self.dbus_increment += 1
                 while self.player._process is not None: time.sleep(1)
             else:
                 self.process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
