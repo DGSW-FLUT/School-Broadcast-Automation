@@ -22,7 +22,8 @@ class Scheduler(QThreadWithLogging):
         self.name_for_static_alarm.append('점호시작')
         self.name_for_static_alarm.append('점호종료')
         self.name_for_static_alarm.append('기숙사퇴실')
-
+        self.name_for_static_alarm.append('복귀체크')
+        
         self.tag_command_queue = []
         self.prev = datetime.datetime(2020, 8, 1)
         self.curr = datetime.datetime.now()
