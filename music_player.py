@@ -11,6 +11,7 @@ capable_gpio = is_run_on_posix
 if is_run_on_posix:
     import RPi.GPIO as gpio
     from omxplayer.player import OMXPlayer
+
     gpio.setwarnings(False)
 else:
     import subprocess
@@ -54,10 +55,10 @@ class MusicPlayer(QThreadWithLogging):
             gpio.output(18, gpio.HIGH)
         try:
             if is_run_on_posix:
-                self.player = OMXPlayer(mp3_path, args='--no-keys -o local',
-                                        dbus_name=f'org.mpris.MediaPlayer2.omxplayer{self.dbus_increment}')
+                player = OMXPlayer(mp3_path, args='--no-keys -o local',
+                                   dbus_name=f'org.mpris.MediaPlayer2.omxplayer{self.dbus_increment}')
                 self.dbus_increment += 1
-                while self.player._process.returncode is None: time.sleep(1)
+                while player._process.returncode is None: time.sleep(1)
             else:
                 process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
                 process.wait()
