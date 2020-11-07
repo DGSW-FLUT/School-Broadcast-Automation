@@ -59,10 +59,11 @@ class Scheduler(QThreadWithLogging):
                 self.main_platform.music_player.push_to_playlist(
                     self.main_platform.storage_manager.files_to_play)
         elif tag == '기상송초기화':
-            self.main_platform.storage_manager.clear_internal_storage()
-        elif tag == '기상송다운로드':
-            self.main_platform.storage_manager.clear_internal_storage()
             with self.main_platform.storage_manager.lock:
+                self.main_platform.storage_manager.clear_internal_storage()
+        elif tag == '기상송다운로드':
+            with self.main_platform.storage_manager.lock:
+                self.main_platform.storage_manager.clear_internal_storage()
                 self.music_downloader.download()
         elif tag == '아침운동체크':
             self.main_platform.music_player.music_pause()
