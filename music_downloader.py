@@ -29,7 +29,7 @@ class MusicDownloader(DelegateLogging):
 
         res = requests.request('GET',
                                f'http://dodam.b1nd.com/api/v2/wakeup-song?year={target.year}&month={target.month}&date={target.day}',
-                               headers=self._get_header_for_request_wake_songs())
+                               headers=self._get_header_for_request_wake_songs(), timeout=3)
         if not res.ok:
             self.log('Failed to Get music list because of status code ', res.status_code)
             return
