@@ -107,29 +107,29 @@ class MusicPlayer(QThreadWithLogging):
 
     @pyqtSlot()
     def music_pause(self):
-        if self.process:
-            try:
-                if is_run_on_posix:
-                    self.player.pause()
-                    gpio.output(18, gpio.LOW)
-                else:
+        try:
+            if is_run_on_posix:
+                self.player.pause()
+                gpio.output(18, gpio.LOW)
+            else:
+                if self.process:
                     self.process_util.suspend()
-            except Exception as e:
-                self.log(f'failed to pause music')
-                self.log(traceback.format_exc())
+        except Exception as e:
+            self.log(f'failed to pause music')
+            self.log(traceback.format_exc())
 
     @pyqtSlot()
     def music_resume(self):
-        if self.process:
-            try:
-                if is_run_on_posix:
-                    self.player.play()
-                    gpio.output(18, gpio.HIGH)
-                else:
+        try:
+            if is_run_on_posix:
+                self.player.play()
+                gpio.output(18, gpio.HIGH)
+            else:
+                if self.process:
                     self.process_util.resume()
-            except Exception as e:
-                self.log(f'failed to pause music')
-                self.log(traceback.format_exc())
+        except Exception as e:
+            self.log(f'failed to pause music')
+            self.log(traceback.format_exc())
 
     @pyqtSlot()
     def close(self):
