@@ -1,19 +1,19 @@
 import os
-import subprocess
 import traceback
-import signal
-import psutil
+import time
+
 from threading import Lock
-
 from PyQt5.QtCore import pyqtSlot
-
 from debug.qthread_with_logging import QThreadWithLogging
 
-capable_gpio = os.name == 'posix'
-
-if capable_gpio:
+is_run_on_posix = os.name == 'posix'
+capable_gpio = is_run_on_posix
+if is_run_on_posix:
     import RPi.GPIO as gpio
-
+    from omxplayer.player import OMXPlayer
+else:    
+    import subprocess
+    import psutil
 
 class MusicPlayer(QThreadWithLogging):
     def __init__(self):
@@ -21,6 +21,7 @@ class MusicPlayer(QThreadWithLogging):
         self.playlist = []
         self.process = None
         self.process_util = None
+        self.player = None
         self.lock = Lock()
         if capable_gpio:
             gpio.setmode(gpio.BCM)
@@ -48,10 +49,9 @@ class MusicPlayer(QThreadWithLogging):
         if capable_gpio:
             gpio.output(18, gpio.HIGH)
         try:
-            if os.name == 'posix':
-                process = subprocess.Popen(f'omxplayer -o local "{mp3_path}" --no-keys', shell=True)
-                process.wait()
-                process.terminate()
+            if is_run_on_posix:
+                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b')                
+                while self.player._process is not None: time.sleep(1)
             else:
                 process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
                 process.wait()
@@ -69,11 +69,9 @@ class MusicPlayer(QThreadWithLogging):
         if capable_gpio:
             gpio.output(18, gpio.HIGH)
         try:
-            if os.name == 'posix':
-                self.process = subprocess.Popen(f'omxplayer -o local "{mp3_path}" --no-keys', shell=True)
-                self.process_util = psutil.Process(pid=self.process.pid)
-                self.process.wait()
-                self.process.terminate()
+            if is_run_on_posix:
+                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b')          
+                while self.player._process is not None: time.sleep(1)
             else:
                 self.process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
                 self.process_util = psutil.Process(pid=self.process.pid)
@@ -102,9 +100,11 @@ class MusicPlayer(QThreadWithLogging):
     def music_pause(self):
         if self.process:
             try:
-                self.process_util.suspend()
-                if capable_gpio:
+                if is_run_on_posix:                    
+                    self.player.pause()
                     gpio.output(18, gpio.LOW)
+                else:
+                    self.process_util.suspend()
             except Exception as e:
                 self.log(f'failed to pause music')
                 self.log(traceback.format_exc())
@@ -113,9 +113,11 @@ class MusicPlayer(QThreadWithLogging):
     def music_resume(self):
         if self.process:
             try:
-                self.process_util.resume()
-                if capable_gpio:
+                if is_run_on_posix:                 
+                    self.player.play()
                     gpio.output(18, gpio.HIGH)
+                else: 
+                    self.process_util.resume()                    
             except Exception as e:
                 self.log(f'failed to pause music')
                 self.log(traceback.format_exc())
