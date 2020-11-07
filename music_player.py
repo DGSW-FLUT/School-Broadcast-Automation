@@ -11,6 +11,7 @@ capable_gpio = is_run_on_posix
 if is_run_on_posix:
     import RPi.GPIO as gpio
     from omxplayer.player import OMXPlayer
+    gpio.setwarnings(False)
 else:
     import subprocess
     import psutil
