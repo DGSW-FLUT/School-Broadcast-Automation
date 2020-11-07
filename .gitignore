@@ -125,5 +125,4 @@ dmypy.json
 .idea
 
 # School Broadcast Automation
-buffer/*.mp3
-tts_buffer/*.mp3
+buffer/*.mp?
