@@ -37,7 +37,14 @@ class MusicDownloader(DelegateLogging):
         return [row['videoUrl'] for k, row in enumerate(res['data']['allow'])]
 
     def download(self):
-        music_list = self._get_music_url_list()
+        self.log('start to get music list')
+        try:
+            music_list = self._get_music_url_list()
+            self.log('success to get music list')
+        except:
+            self.log('failed to get music list')
+            self.log(traceback.format_exc())
+            return
         all_music_count = len(music_list)
         self.log(f'start downloads {all_music_count}')
         try:
