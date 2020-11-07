@@ -5,7 +5,7 @@ from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtCore import pyqtSlot, QTimer, QStringListModel, QModelIndex
 from PyQt5.QtWidgets import QTreeWidgetItem, QPushButton
 
-from external_storage_manager import ExternalStorageManager
+from storage_manager import StorageManager
 from music_player import MusicPlayer
 from data.quick_macros import quick_macros
 from data.schedule import schedule as entire_schedule
@@ -57,8 +57,8 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('data/planner.ui')[0]):
         self.submit.clicked.connect(self.on_input)
         self.data_edit.returnPressed.connect(self.submit.click)
 
-        self.external_storage_manager = ExternalStorageManager()
-        self.external_storage_manager.start()
+        self.storage_manager = StorageManager()
+        self.storage_manager.start()
 
         self.music_player = MusicPlayer()
         self.music_player.start()
@@ -66,15 +66,20 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('data/planner.ui')[0]):
         self.scheduler = Scheduler(self)
         self.scheduler.start()
 
-        self.log_units = [self.external_storage_manager, self.music_player, self.scheduler]
+        self.log_units = [self.storage_manager, self.music_player, self.scheduler]
 
         self.checkbox_list = []
         for k in range(16):
             self.checkbox_list.append(getattr(self, f'checkbox_list_item{k}'))
+
+        def get_checkbox_handler(checkbox, k, callback):
+            return lambda: callback(checkbox, k)
+
         for k, log_unit in enumerate(self.log_units):
             self.checkbox_list[k].setText(log_unit.log_header)
             self.checkbox_list[k].setChecked(True)
-            self.checkbox_list[k].toggled.connect(lambda: self.on_toggle_checkbox(self.checkbox_list[k], k))
+            self.checkbox_list[k].toggled.connect(
+                get_checkbox_handler(self.checkbox_list[k], k, self.on_toggle_checkbox))
 
         self.checkbox_list_autoscroll.setChecked(True)
 
@@ -162,16 +167,12 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('data/planner.ui')[0]):
                 self.music_player.play_unstoppable_music('audio/테스트.mp3')
                 self.music_player.music_resume()
             elif command == 'get_musics':
-                with self.external_storage_manager.lock:
-                    files_to_store = self.external_storage_manager.files_to_store
-                    if len(files_to_store) > 0:
-                        self.insert_log('=================현재 기상송===============\n' +
-                                        str(files_to_store)[1:-1].replace(',', '\n') + '\n' +
-                                        '=========================================')
-                    else:
-                        self.insert_log('=================현재 기상송===============\n(없음, 기본 기상곡)\n' +
-                                        '========================================='
-                                        )
+                with self.storage_manager.lock:
+                    log = '=================현재 기상송===============\n'
+                    for file_path in self.storage_manager.files_to_play:
+                        log += file_path + '\n'
+                    log += '========================================='
+                    self.insert_log(log)
             elif command == 'all_around_test':
                 self.scheduler.all_around_test()
             elif command == 'abort_song':
@@ -179,7 +180,7 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('data/planner.ui')[0]):
                 self.music_player.process = None
                 self.music_player.process_util = None
             elif command.startswith('-'):
-                self.scheduler.tag_decoder(command[1:])
+                self.scheduler.push_tag_command(command[1:])
             else:
                 self.insert_log(f'?? {command}')
 

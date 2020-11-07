@@ -6,12 +6,7 @@ from PyQt5.QtCore import pyqtSlot
 from debug.qthread_with_logging import QThreadWithLogging
 from data.schedule import schedule as entire_schedule
 from threading import Lock
-
-
-def get_music_for_none_buffer_case():
-    weekday = datetime.datetime.now().weekday()
-    return [f'audio/default_music/{weekday}/0.mp3', f'audio/default_music/{weekday}/1.mp3',
-            f'audio/default_music/{weekday}/2.mp3']
+from music_downloader import MusicDownloader
 
 
 class Scheduler(QThreadWithLogging):
@@ -28,9 +23,12 @@ class Scheduler(QThreadWithLogging):
         self.name_for_static_alarm.append('점호종료')
         self.name_for_static_alarm.append('기숙사퇴실')
 
+        self.tag_command_queue = []
         self.prev = datetime.datetime(2020, 8, 1)
         self.curr = datetime.datetime.now()
         self.debug_all_around = False
+
+        self.music_downloader = MusicDownloader(self)
 
         self.lock = Lock()
 
@@ -49,18 +47,22 @@ class Scheduler(QThreadWithLogging):
         self.log(f'unlock to all_around_test')
 
     @pyqtSlot(str)
-    def tag_decoder(self, tag: str):
+    def push_tag_command(self, tag: str):
+        self.log(f'push {tag}')
+        self.tag_command_queue.append(tag)
+
+    def decode_tag(self, tag: str):
         self.log(f'decode {tag}')
         if tag == '기상송':
-            with self.main_platform.external_storage_manager.lock:
+            with self.main_platform.storage_manager.lock:
                 self.log(f'getlock 기상송')
-                if len(self.main_platform.external_storage_manager.files_to_play) > 0:
-                    self.main_platform.music_player.push_to_playlist(
-                        self.main_platform.external_storage_manager.files_to_play)
-                else:
-                    self.main_platform.music_player.push_to_playlist(get_music_for_none_buffer_case())
+                self.main_platform.music_player.push_to_playlist(
+                    self.main_platform.storage_manager.files_to_play)
         elif tag == '기상송초기화':
-            self.main_platform.external_storage_manager.clear_internal_storage()
+            self.main_platform.storage_manager.clear_internal_storage()
+        elif tag == '기상송다운로드':
+            with self.main_platform.storage_manager.lock:
+                self.music_downloader.download()
         elif tag == '아침운동체크':
             self.main_platform.music_player.music_pause()
             self.main_platform.music_player.play_unstoppable_music('audio/아침운동체크.mp3')
@@ -80,6 +82,9 @@ class Scheduler(QThreadWithLogging):
             with self.lock:
                 if not self.debug_all_around:
                     self.curr = datetime.datetime.now()
+                if self.tag_command_queue:
+                    self.decode_tag(self.tag_command_queue[0])
+                    del self.tag_command_queue[0]
                 try:
                     if self.curr.date() != self.prev.date():
                         self.prev = self.curr
@@ -92,7 +97,7 @@ class Scheduler(QThreadWithLogging):
                     for certain_time in self.schedule:
                         if self.prev.time() < certain_time <= self.curr.time():
                             self.prev = datetime.datetime.combine(self.curr.date(), certain_time)
-                            self.tag_decoder(self.schedule[certain_time])
+                            self.decode_tag(self.schedule[certain_time])
                             is_trying_to_play = True
                             break
 

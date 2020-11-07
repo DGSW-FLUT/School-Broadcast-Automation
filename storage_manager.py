@@ -3,11 +3,19 @@ import shutil
 import subprocess
 import time
 import traceback
+import datetime
 from threading import Lock
 
 from debug.qthread_with_logging import QThreadWithLogging
 
 is_posix = os.name == 'posix'
+
+MUSIC_COUNT = 3
+
+
+def get_default_music():
+    weekday = datetime.datetime.now().weekday()
+    return [f'audio/default_music/{weekday}/{k}.mp3' for k in range(MUSIC_COUNT)]
 
 
 def get_available_external_storage_list():
@@ -28,9 +36,8 @@ def get_available_external_storage_list():
     return external_storage_list
 
 
-class ExternalStorageManager(QThreadWithLogging):
+class StorageManager(QThreadWithLogging):
     old_external_storage_list = []
-    files_to_play = []
     files_to_store = []
     lock = Lock()
 
@@ -40,7 +47,6 @@ class ExternalStorageManager(QThreadWithLogging):
 
     def clear_internal_storage(self):
         self.log('clear_IntStorage')
-        self.files_to_play = []
         for file in os.listdir(self.store_path):
             if file.startswith('.'):
                 continue
@@ -51,7 +57,22 @@ class ExternalStorageManager(QThreadWithLogging):
         for k, file in enumerate(self.files_to_store):
             self.log(f'store_IntStorage_from_ExtStorage {file}')
             shutil.copyfile(load_path + file, self.store_path + f'{k}.mp3')
-            self.files_to_play.append(self.store_path + f'{k}.mp3')
+
+    @property
+    def files_to_play(self):
+        result = []
+        for name in os.listdir(self.store_path):
+            if not os.path.isfile(self.store_path + name):
+                continue
+            if name.endswith('.mp3') or name.endswith('.mp4'):
+                if name[0] in ('.', '$', '~'):
+                    continue
+                result.append(self.store_path + name)
+
+        default_music = get_default_music()
+        while len(result) < MUSIC_COUNT:
+            result.append(default_music[len(result)])
+        return result
 
     def run(self):
         while not self.isFinished():

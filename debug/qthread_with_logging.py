@@ -10,6 +10,9 @@ class QThreadWithLogging(QThread):
         self.log_queue = []
         self.log_enable = True
 
+    def delegate_log(self, log_header, text):
+        self.log_queue.append((datetime.datetime.now(), f'{log_header}: {text}'))
+
     def log(self, text):
         if self.log_enable:
             self.log_queue.append((datetime.datetime.now(), f'{self.log_header}: {text}'))

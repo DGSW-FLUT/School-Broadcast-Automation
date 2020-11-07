@@ -11,9 +11,10 @@ capable_gpio = is_run_on_posix
 if is_run_on_posix:
     import RPi.GPIO as gpio
     from omxplayer.player import OMXPlayer
-else:    
+else:
     import subprocess
     import psutil
+
 
 class MusicPlayer(QThreadWithLogging):
     def __init__(self):
@@ -50,7 +51,7 @@ class MusicPlayer(QThreadWithLogging):
             gpio.output(18, gpio.HIGH)
         try:
             if is_run_on_posix:
-                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b')                
+                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b')
                 while self.player._process is not None: time.sleep(1)
             else:
                 process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
@@ -70,7 +71,7 @@ class MusicPlayer(QThreadWithLogging):
             gpio.output(18, gpio.HIGH)
         try:
             if is_run_on_posix:
-                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b')          
+                self.player = OMXPlayer(mp3_path, args='--no-osd --no-keys -b')
                 while self.player._process is not None: time.sleep(1)
             else:
                 self.process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
@@ -100,7 +101,7 @@ class MusicPlayer(QThreadWithLogging):
     def music_pause(self):
         if self.process:
             try:
-                if is_run_on_posix:                    
+                if is_run_on_posix:
                     self.player.pause()
                     gpio.output(18, gpio.LOW)
                 else:
@@ -113,11 +114,11 @@ class MusicPlayer(QThreadWithLogging):
     def music_resume(self):
         if self.process:
             try:
-                if is_run_on_posix:                 
+                if is_run_on_posix:
                     self.player.play()
                     gpio.output(18, gpio.HIGH)
-                else: 
-                    self.process_util.resume()                    
+                else:
+                    self.process_util.resume()
             except Exception as e:
                 self.log(f'failed to pause music')
                 self.log(traceback.format_exc())

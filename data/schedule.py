@@ -11,6 +11,7 @@ schedule = {
         datetime.time(hour=8, minute=15): '기상송초기화',
         datetime.time(hour=8, minute=17): '기숙사퇴실',
         datetime.time(hour=21, minute=17): '입구폐쇄',
+        datetime.time(hour=22, minute=20): '기상송다운로드',
         datetime.time(hour=22, minute=28): '점호준비',
         datetime.time(hour=22, minute=40): '점호시작',
         datetime.time(hour=22, minute=50): '점호종료'
@@ -32,6 +33,7 @@ schedule = {
         datetime.time(hour=19, minute=10): '복귀체크',
 
         datetime.time(hour=21, minute=17): '입구폐쇄',
+        datetime.time(hour=22, minute=20): '기상송다운로드',
         datetime.time(hour=22, minute=30): '점호준비',
         datetime.time(hour=22, minute=40): '점호시작',
         datetime.time(hour=22, minute=50): '점호종료'
