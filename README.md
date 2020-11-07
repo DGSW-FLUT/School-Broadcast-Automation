@@ -1,5 +1,6 @@
 # School Broadcast Automation
 ![alt](/data/example.png)
+![alt](/data/install_example.jpg)
 Build with Python3.7
 ## Available Platform
 * Windows 7 or later
