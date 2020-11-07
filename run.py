@@ -116,6 +116,7 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('data/planner.ui')[0]):
         row = self.console_log.rowCount()
         self.console_log.insertRow(row)
         index = self.console_log.index(row)
+        print(log)
         self.console_log.setData(index, log)
 
     @pyqtSlot(QModelIndex)
