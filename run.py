@@ -177,9 +177,7 @@ class MainWindow(QtWidgets.QMainWindow, uic.loadUiType('data/planner.ui')[0]):
             elif command == 'all_around_test':
                 self.scheduler.all_around_test()
             elif command == 'abort_song':
-                self.music_player.process.terminate()
-                self.music_player.process = None
-                self.music_player.process_util = None
+                self.music_player.close()
             elif command.startswith('-'):
                 self.scheduler.push_tag_command(command[1:])
             else:

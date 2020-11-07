@@ -133,5 +133,12 @@ class MusicPlayer(QThreadWithLogging):
 
     @pyqtSlot()
     def close(self):
-        if self.process:
-            print(self.process.terminate())
+        try:
+            if is_run_on_posix:
+                self.player.quit()
+                gpio.output(18, gpio.LOW)
+            else:
+                self.process.terminate()
+        except Exception as e:
+            self.log(f'failed to close music')
+            self.log(traceback.format_exc())
