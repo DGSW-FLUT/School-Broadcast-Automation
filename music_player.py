@@ -57,7 +57,7 @@ class MusicPlayer(QThreadWithLogging):
                 self.player = OMXPlayer(mp3_path, args='--no-keys -o local',
                                         dbus_name=f'org.mpris.MediaPlayer2.omxplayer{self.dbus_increment}')
                 self.dbus_increment += 1
-                while self.player._process.returncode is not None: time.sleep(1)
+                while self.player._process.returncode is None: time.sleep(1)
             else:
                 process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
                 process.wait()
@@ -79,7 +79,7 @@ class MusicPlayer(QThreadWithLogging):
                 self.player = OMXPlayer(mp3_path, args='--no-keys -o local',
                                         dbus_name=f'org.mpris.MediaPlayer2.omxplayer{self.dbus_increment}')
                 self.dbus_increment += 1
-                while self.player._process.returncode is not None: time.sleep(1)
+                while self.player._process.returncode is None: time.sleep(1)
             else:
                 self.process = subprocess.Popen(rf'python debug\run_mp3.py "{mp3_path}"')
                 self.process_util = psutil.Process(pid=self.process.pid)
