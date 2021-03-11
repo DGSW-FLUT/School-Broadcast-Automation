@@ -68,7 +68,7 @@ class StorageManager(QThreadWithLogging):
                 if name[0] in ('.', '$', '~'):
                     continue
                 result.append(self.store_path + name)
-
+        result.sort()
         default_music = get_default_music()
         while len(result) < MUSIC_COUNT:
             result.append(default_music[len(result)])
