@@ -36,6 +36,8 @@ class Scheduler(QThreadWithLogging):
         for grade in ['1', '2', '3']:
             for meal in ['아침', '점심', '저녁']:
                 self.name_for_static_alarm.append(f'{grade}학년{meal}')
+        self.name_for_static_alarm.append('저녁외출')
+        self.name_for_static_alarm.append('점심외출')
 
     @pyqtSlot()
     def all_around_test(self):
@@ -77,8 +79,10 @@ class Scheduler(QThreadWithLogging):
         self.log(f'finish {tag}')
 
     def run(self):
-        if self.curr.date().weekday() in [5, 6]:
-            self.schedule = entire_schedule['휴일']
+        if self.curr.date().weekday() == 5:
+            self.schedule = entire_schedule['토']
+        elif self.curr.date().weekday() == 6:
+            self.schedule = entire_schedule['일']
         else:
             self.schedule = entire_schedule['평일']
         while not self.isFinished():
@@ -91,8 +95,10 @@ class Scheduler(QThreadWithLogging):
                 try:
                     if self.curr.date() != self.prev.date():
                         self.prev = self.curr
-                        if self.curr.date().weekday() in [5, 6]:
-                            self.schedule = entire_schedule['휴일']
+                        if self.curr.date().weekday() == 5:
+                            self.schedule = entire_schedule['토']
+                        elif self.curr.date().weekday() == 6:
+                            self.schedule = entire_schedule['일']
                         else:
                             self.schedule = entire_schedule['평일']
 
