@@ -4,4 +4,4 @@ PyQt5-stubs==5.14.2.2
 RPi.GPIO==0.7.0
 omxplayer-wrapper==0.3.3
 pytube==9.7.0
-requests==2.24.0
+requests==2.31.0
